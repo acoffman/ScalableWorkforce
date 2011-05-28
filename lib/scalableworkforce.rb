@@ -1,8 +1,9 @@
-%w{models.rb client.rb}.each do |file|
+%w{models.rb client.rb batchrequest.rb}.each do |file|
   require File.dirname(__FILE__) +"/lib/" + file
 end
 
 module ScalableWorkforce
+
   VERSION = '0.1.0'
 
   BASE_URL = {
