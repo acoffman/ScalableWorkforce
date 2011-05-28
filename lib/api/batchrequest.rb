@@ -6,7 +6,7 @@ module ScalableWorkforce
   class BatchRequest
     @tasks = []
     
-    def initialize(*tasks)
+    def initialize(tasks)
       @tasks = tasks
     end
 
@@ -32,7 +32,7 @@ module ScalableWorkforce
 
   class TaskInput
     @inputs = []
-    def initialize(*inputs)
+    def initialize(inputs)
       @inputs = inputs
     end
 

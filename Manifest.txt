@@ -1,0 +1,7 @@
+README.md
+LICENSE.md
+Manifest.txt
+lib/scalableworkforce.rb
+lib/api/client.rb
+lib/api/batchrequest.rb
+lib/api/models.rb
