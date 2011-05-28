@@ -21,11 +21,40 @@ module ScalableWorkforce
     elements 'BatchStatus/Status' => :status, :with => BatchStatus
   end
 
-  class Task < Nibbler
+  class IOSuper < Nibbler
+    element '@Name' => :name
+    elements 'Value' => :values
+  end
 
+  class Input < IOSuper
+  end
+
+  class Output < IOSuper
+  end
+
+  class Task < Nibbler
+    element '@TaskId' => :id
+    elements '/Task/Inputs' => :inputs, :with => Input
+    elements '/Task/Outputs' => :outputs, :with => Output
   end
 
   class TaskList < Nibbler
+    elements '/Tasks/Task' => :tasks, :with => Task
+    def [](arg)
+      self.tasks[arg]
+    end
+  end
+
+  class BatchResult < Nibbler
+    element '@BatchId' => :id
+    elements '/BatchResult/Task/@TaskId' => :tasks
+  end
+
+  class RequiredInputs < Nibbler
+    elements 'Input' => :inputs, :with => Input
+    def [](arg)
+      self.inputs[arg]
+    end
   end
 
 end
