@@ -7,8 +7,10 @@ module ScalableWorkforce
   VERSION = '0.1.0'
 
   BASE_URL = {
-    :sandbox => 'https://api.sandbox.scalableworkforce.com/xml',
-    :production => 'https://api.scalableworkforce.com/xml'
+    :sandbox => 'https://api.sandbox.scalableworkforce.com/xml/',
+    :production => 'https://api.scalableworkforce.com/xml/'
   }
+  
+  MAIN_URL = "{CLIENTHANDLE}/workflows/{WORKFLOWHANDLE}/"
 
 end

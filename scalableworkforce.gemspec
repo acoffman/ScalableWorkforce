@@ -11,5 +11,6 @@ Gem::Specification.new do |s|
   s.add_dependency(%q<nokogiri>, [">= 1.4.4"])
   s.add_dependency(%q<nibbler>, [">= 1.2.1"])
   s.add_dependency(%q<builder>, [">= 3.0.0"])
+  s.add_dependency(%q<addressable>, [">= 2.2.6"])
 end
 
