@@ -10,13 +10,51 @@ module ScalableWorkforce
 
     def initialize(params, environment = :sandbox)
       @credentials = params
+      @accessKey = {:accessKey => @credentials[:access_key]}
       url = "#{BASE_URL[environment]}#{MAIN_URL}"
-      BatchRequest = Addressable::Template.new "#{url}batches"
-      BatchStatus = Addressable::Template.new  "#{url}batches/{BATCHID}/stats"
-      BatchTasks = Addressable::Template.new  "#{url}batches/{BATCHID}/tasks"
-      WorkflowInputs = Addressable::Template.new  "#{url}inputs"
-      WorkflowTasks = Addressable::Template.new  "#{url}tasks"
-      WorkflowTask = Addressable::Template.new  "#{url}tasks/{TASKID}"
+      BatchRequestUrl = Addressable::Template.new "#{url}batches"
+      BatchStatusUrl = Addressable::Template.new  "#{url}batches/{BATCHID}/stats"
+      BatchTasksUrl = Addressable::Template.new  "#{url}batches/{BATCHID}/tasks"
+      WorkflowInputsUrl = Addressable::Template.new  "#{url}inputs"
+      WorkflowTasksUrl = Addressable::Template.new  "#{url}tasks"
+      WorkflowTaskUrl = Addressable::Template.new  "#{url}tasks/{TASKID}"
+    end
+
+    def import_batch(batch)
+      url = BatchRequestUrl.expand @credentials
+      parse_response(url, @accessKey, BatchResult, :post, batch.to_xml)
+    end
+
+    def get_batches
+      url = BatchRequestUrl.expand @credentials
+      parse_response(url, @accessKey, BatchList)
+    end
+
+    def get_batch_status(batchid)
+      url = BatchStatusUrl.expand({:BATCHID => batchid}.merge(@credentials))
+      parse_response(url, @accessKey, BatchStatusList)
+    end
+
+    def get_batch_tasks(batchid, status = nil)
+      params = @accessKey.dup
+      params[:STATUSCODE] = status unless status.nil?
+      url = BatchTasksUrl.expand({:BATCHID => batchid}.merge(@credentials))
+      parse_response(url, params, TaskList)
+    end
+
+    def get_workflow_inputs
+      url = WorkflowInputsUrl.expand @credentials
+      parse_response(url, @accessKey, RequiredInputs)
+    end
+
+    def get_tasks(task_list)
+      url = WorkflowTasksUrl.expand @credentials
+      parse_response(url, @accessKey, TaskList, :post, task_list)
+    end
+
+    def get_task(taskid)
+      url = WorkflowTaskUrl.expand({:TASKID => taskid}.merge(@credentials))
+      parse_response(url, @accessKey, Task)
     end
 
     def get_request(url)
@@ -28,12 +66,22 @@ module ScalableWorkforce
       end
     end
 
-    def post_request
+    def post_request(url,data)
+      resp = Net::HTTP.post_form(url,{'data' => data})
+      if Net::HTTPSuccess === resp
+        resp.body
+      else
+        resp.error!
+      end
     end
 
-    def parse_response(url,params,parser = nil)
+    def parse_response(url,params,parser = nil, method = :get, data = nil)
       url.query_values = params
-      resp = get_request url
+      if method == :get
+        resp = get_request url
+      else
+        resp = post_request url, data
+      end
       parser ? parser.parse(body) : body
     end
 
