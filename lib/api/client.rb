@@ -2,6 +2,7 @@ require 'api/models'
 require 'addressable/uri'
 require 'addressable/template'
 require 'net/http'
+require 'net/https'
 
 module ScalableWorkforce
 
@@ -67,7 +68,9 @@ module ScalableWorkforce
     end
 
     def post_request(url,data)
-      resp = Net::HTTP.post_form(url,{'data' => data})
+      @headers ||= { 'Content-Type' => "text/xml; encoding='utf-8'",
+                     'User-agent' => 'SWF ruby client' }
+      resp = Net::HTTP.start(url.host, url.port, opt = {:use_ssl => true}) { |http| http.post(url.request_uri, data, @headers) }
       if Net::HTTPSuccess === resp
         resp.body
       else
@@ -75,7 +78,7 @@ module ScalableWorkforce
       end
     end
 
-    def parse_response(url,params,parser = nil, method = :get, data = nil)
+    def parse_response(url,params, parser = nil, method = :get, data = nil)
       url.query_values = params
       if method == :get
         resp = get_request url

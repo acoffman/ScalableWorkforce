@@ -1,5 +1,5 @@
 %w{models.rb client.rb batchrequest.rb}.each do |file|
-  require File.dirname(__FILE__) +"/lib/" + file
+  require File.dirname(__FILE__) +"/api/" + file
 end
 
 module ScalableWorkforce
