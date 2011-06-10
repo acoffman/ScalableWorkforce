@@ -1,5 +1,13 @@
+require 'nokogiri'
+require 'builder'
+require 'addressable/uri'
+require 'addressable/template'
+require 'net/http'
+require 'net/https'
+require 'nibbler'
+
 %w{models.rb client.rb batchrequest.rb}.each do |file|
-  require File.dirname(__FILE__) +"/api/" + file
+  require_relative "api/" + file
 end
 
 module ScalableWorkforce

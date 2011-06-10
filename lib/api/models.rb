@@ -1,6 +1,3 @@
-require 'nokogiri'
-require 'nibbler'
-
 module ScalableWorkforce
 
   class BatchList < Nibbler

@@ -2,7 +2,6 @@ Gem::Specification.new do |s|
   s.name = %q{scalableworkforce}
   s.required_ruby_version = '>= 1.9.2'
   s.version = "0.1.0"
-  s.date = %q{5/28/11}
   s.authors = ["Adam Coffman"]
   s.email = ["coffman.adam@gmail.com"]
   s.summary = %q{An interface to ScalableWorkforce.com's public API}

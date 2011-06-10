@@ -1,5 +1,3 @@
-require 'builder'
-
 module ScalableWorkforce 
 
   #a task is a list of batchinputs
