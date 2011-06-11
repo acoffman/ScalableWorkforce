@@ -46,4 +46,21 @@ module ScalableWorkforce
     attr_accessor :name, :values
   end
 
+  class TaskRequest
+    def initialize(vals)
+      @taskids = vals 
+    end
+
+    def to_xml
+      xml = Builder::XmlMarkup.new
+      xml.TasksRequest do
+        @taskids.each do |taskid|
+          xml.Task(:TaskId => taskid)
+        end
+      end
+    end
+
+    attr_accessor :taskids
+  end
+
 end

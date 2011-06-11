@@ -19,6 +19,6 @@ module ScalableWorkforce
     :production => 'https://api.scalableworkforce.com/xml/'
   }
   
-  MAIN_URL = "{CLIENTHANDLE}/workflows/{WORKFLOWHANDLE}/"
+  MAIN_URL = "{client_handle}/workflows/{workflow_handle}/"
 
 end

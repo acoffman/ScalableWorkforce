@@ -2,17 +2,16 @@ module ScalableWorkforce
 
   class ScalableWorkforceClient
 
-
     def initialize(params, environment = :sandbox)
       @credentials = params
       @accessKey = {:accessKey => @credentials[:access_key]}
       url = "#{BASE_URL[environment]}#{MAIN_URL}"
       @@BatchRequestUrl = Addressable::Template.new "#{url}batches"
-      @@BatchStatusUrl = Addressable::Template.new  "#{url}batches/{BATCHID}/stats"
-      @@BatchTasksUrl = Addressable::Template.new  "#{url}batches/{BATCHID}/tasks"
+      @@BatchStatusUrl = Addressable::Template.new  "#{url}batches/{batch_id}/stats"
+      @@BatchTasksUrl = Addressable::Template.new  "#{url}batches/{batch_id}/tasks"
       @@WorkflowInputsUrl = Addressable::Template.new  "#{url}inputs"
       @@WorkflowTasksUrl = Addressable::Template.new  "#{url}tasks"
-      @@WorkflowTaskUrl = Addressable::Template.new  "#{url}tasks/{TASKID}"
+      @@WorkflowTaskUrl = Addressable::Template.new  "#{url}tasks/{task_id}"
     end
 
     def import_batch(batch)
@@ -26,14 +25,14 @@ module ScalableWorkforce
     end
 
     def get_batch_status(batchid)
-      url = @@BatchStatusUrl.expand({:BATCHID => batchid}.merge(@credentials))
+      url = @@BatchStatusUrl.expand({:batch_id => batchid}.merge(@credentials))
       parse_response(url, @accessKey, BatchStatusList)
     end
 
     def get_batch_tasks(batchid, status = nil)
       params = @accessKey.dup
       params[:STATUSCODE] = status unless status.nil?
-      url = @@BatchTasksUrl.expand({:BATCHID => batchid}.merge(@credentials))
+      url = @@BatchTasksUrl.expand({:batch_id => batchid}.merge(@credentials))
       parse_response(url, params, TaskList)
     end
 
@@ -44,11 +43,11 @@ module ScalableWorkforce
 
     def get_tasks(task_list)
       url = @@WorkflowTasksUrl.expand @credentials
-      parse_response(url, @accessKey, TaskList, :post, task_list)
+      parse_response(url, @accessKey, TaskList, :post, task_list.to_xml)
     end
 
     def get_task(taskid)
-      url = @@WorkflowTaskUrl.expand({:TASKID => taskid}.merge(@credentials))
+      url = @@WorkflowTaskUrl.expand({:task_id => taskid}.merge(@credentials))
       parse_response(url, @accessKey, Task)
     end
 

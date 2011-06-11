@@ -31,8 +31,9 @@ module ScalableWorkforce
 
   class Task < Nibbler
     element '@TaskId' => :id
-    elements '/Task/Inputs' => :inputs, :with => Input
-    elements '/Task/Outputs' => :outputs, :with => Output
+    element '@Status' => :status
+    elements 'Inputs' => :inputs, :with => Input
+    elements 'Outputs' => :outputs, :with => Output
   end
 
   class TaskList < Nibbler
